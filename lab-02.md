@@ -204,7 +204,7 @@ ggplot(data = plastic_waste,
   geom_point() +
   labs(
     x= "Plastic Waste Per Capita (kg/day)",
-    y = "Total Population",
+    y = "Coastal Population",
     title = "Relationship between Plastic Waste Per Capita and Coastal Population"
     )  
 ```
@@ -223,8 +223,44 @@ well.
 
 ### Exercise 8
 
-Remove this text, and add your answer for Exercise 8 here.
-
 ``` r
-# insert code here
+# create a variable
+plastic_waste$coastal_total_ratio <- plastic_waste$coastal_pop/plastic_waste$total_pop
+# filter out an outlier 
+plastic_waste %>%
+  filter(plastic_waste_per_cap < 3.5) %>%
+ggplot(aes(x = coastal_total_ratio, 
+                y = plastic_waste_per_cap
+                                )) +
+  geom_point(aes(color = continent)) +
+  labs(
+    x= "Coastal population proportion (Coastal / total population)",
+    y = "Plastic Waste Per Capita",
+    title = "Plastic Waste vs. coastal population proportion",
+    subtitle = "by continent"
+    ) +
+  stat_smooth(color = "black") + 
+  scale_colour_viridis_d()
 ```
+
+    ## `geom_smooth()` using method = 'loess' and formula 'y ~ x'
+
+    ## Warning: Removed 10 rows containing non-finite values (stat_smooth).
+
+    ## Warning: Removed 10 rows containing missing values (geom_point).
+
+![](lab-02_files/figure-gfm/recreate-viz-1.png)<!-- --> There is a zero
+relatinoship between coastal population proportion and plastic waste per
+capita as the global linear association between the two variable
+slightly increases, stays at zero change for a while, and then
+marginally declines as the coastal population proportion increases. This
+implies that there’s no relationship between the extent to which coastal
+population constitues the total population in a country and the plastic
+waste per capita in that country.
+
+A couple of small patterns might be worth noting that do not pertain to
+the relationship between the two variables plotted above. It seems that
+plastic waste per capita differs for each content whereby Africa has the
+lowest and North America has the highest. Also, coastal population
+proportion seems to be capped at around .75 for countries in South
+America.
