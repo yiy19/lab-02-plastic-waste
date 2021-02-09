@@ -1,12 +1,13 @@
 Lab 02 - Plastic waste
 ================
-Insert your name here
-Insert date here
+Ye Dam Yi
+February 9, 2021
 
 ## Load packages and data
 
 ``` r
 library(tidyverse) 
+library(ggsci)
 ```
 
 ``` r
@@ -15,59 +16,210 @@ plastic_waste <- read_csv("data/plastic-waste.csv")
 
 ## Exercises
 
+``` r
+ggplot(data = plastic_waste, aes(x = plastic_waste_per_cap)) +
+  geom_histogram(binwidth = 0.2)
+```
+
+    ## Warning: Removed 51 rows containing non-finite values (stat_bin).
+
+![](lab-02_files/figure-gfm/unnamed-chunk-1-1.png)<!-- -->
+
+``` r
+plastic_waste %>%
+  filter(plastic_waste_per_cap > 3.5)
+```
+
+    ## # A tibble: 1 x 10
+    ##   code  entity continent  year gdp_per_cap plastic_waste_p… mismanaged_plas…
+    ##   <chr> <chr>  <chr>     <dbl>       <dbl>            <dbl>            <dbl>
+    ## 1 TTO   Trini… North Am…  2010      31261.              3.6             0.19
+    ## # … with 3 more variables: mismanaged_plastic_waste <dbl>, coastal_pop <dbl>,
+    ## #   total_pop <dbl>
+
 ### Exercise 1
 
 Remove this text, and add your answer for Exercise 1 here.
 
 ``` r
-# insert code here
+ggplot(data = plastic_waste, aes(x = plastic_waste_per_cap)) +
+geom_histogram() +
+  labs(
+  x = "Plastic Waste Per Capita (kg/day)",
+  y = "Count",
+  title = "Plastic Waste Per Capiata (kg/day)",
+  subtitle = "By Continent"
+) + 
+facet_wrap(~ continent)
 ```
+
+    ## `stat_bin()` using `bins = 30`. Pick better value with `binwidth`.
+
+    ## Warning: Removed 51 rows containing non-finite values (stat_bin).
+
+![](lab-02_files/figure-gfm/plastic-waste-continent-1.png)<!-- -->
 
 ### Exercise 2
 
 ``` r
-# insert code here
+ggplot(data = plastic_waste, 
+       mapping = aes(x = plastic_waste_per_cap, 
+                     color = continent,
+                     fill = continent)) +
+  geom_density(alpha = .25)
 ```
+
+    ## Warning: Removed 51 rows containing non-finite values (stat_density).
+
+![](lab-02_files/figure-gfm/plastic-waste-density-1.png)<!-- -->
 
 ### Exercise 3
 
-Remove this text, and add your answer for Exercise 3 here.
+We defined the color and fill of the curves by mapping aesthetics of the
+plot because we wanted the features to vary as the function of the
+variable continent. In contrast, we defined the alpha level as a
+characteristic of the plotting geom because we want the characteristic
+to apply to the graph universally.
 
 ### Exercise 4
 
-Remove this text, and add your answer for Exercise 4 here.
+``` r
+ggplot(data = plastic_waste, 
+       mapping = aes(x = continent, 
+                     y = plastic_waste_per_cap)) +
+  geom_boxplot()
+```
+
+    ## Warning: Removed 51 rows containing non-finite values (stat_boxplot).
+
+![](lab-02_files/figure-gfm/plastic-waste-boxplot-1.png)<!-- -->
 
 ``` r
-# insert code here
+ggplot(data = plastic_waste, 
+       mapping = aes(x = continent, 
+                     y = plastic_waste_per_cap)) +
+  geom_violin() + 
+  coord_flip() +
+  labs(
+    y = "Plastic Waste Per Capita (kg/day)",
+    x = "Continent",
+    title = "Plastic Waste Per Capita (kg/day)",
+    subtitle = "By Continent"
+  )
 ```
+
+    ## Warning: Removed 51 rows containing non-finite values (stat_ydensity).
+
+![](lab-02_files/figure-gfm/plastic-waste-violin-1.png)<!-- --> A
+comparison of the box plots and the violin plots shows that the violin
+plots reveal the density or the actual distribution of the data points
+of plastic waste per capital that the box plots do not reveal. In
+contrast, the box plots readily reveal the outliers in each of the plots
+as distinct dots far removed from the rest of the plots, which are
+subsumed in the violin plots and thus not really distinct.
 
 ### Exercise 5
 
 Remove this text, and add your answer for Exercise 5 here.
 
 ``` r
-# insert code here
+ggplot(data = plastic_waste, aes(x = plastic_waste_per_cap,
+                                 y = mismanaged_plastic_waste_per_cap)) +
+  geom_point() +
+  labs(
+    x= "Plastic Waste Per Capita (kg/day)",
+    y = "Mismanaged Plastic Waste Per Cap",
+    title = "Relationship between Plastic Waste Per Capita and Mismanaged Plastic Waste Per Capital"
+    )
 ```
+
+    ## Warning: Removed 51 rows containing missing values (geom_point).
+
+![](lab-02_files/figure-gfm/plastic-waste-mismanaged-1.png)<!-- -->
+Countries seem to be somewhat polarized into two camps: plastic waste
+per capita is associated with high increases in mismanaged plastic waste
+per capita, or plastic waste per capita is associated with low increases
+in mismanaged plastic waste per capita.
+
+Many countries fall between the two trends.
+
+Interesting are two outliers, one that has the highest plastic waste per
+capita, and the other that has the highest mismanaged plastic waste per
+capital.
 
 ### Exercise 6
 
-Remove this text, and add your answer for Exercise 6 here.
-
 ``` r
-# insert code here
+ggplot(data = plastic_waste, 
+            aes(x = plastic_waste_per_cap, y = mismanaged_plastic_waste_per_cap,
+                                 colour = continent)) +
+  geom_point() +
+  labs(
+    x= "Plastic Waste Per Capita (kg/day)",
+    y = "Mismanaged Plastic Waste Per Cap",
+    title = "Relationship between Plastic Waste Per Capita and Mismanaged Plastic Waste Per Capital",
+    subtitle = "By Continent"
+    ) + 
+  theme_dark() + theme(
+    panel.background = element_rect(fill = "#2D2D2D"),
+    legend.key = element_rect(fill = "#2D2D2D")) +
+  scale_color_tron()
 ```
+
+    ## Warning: Removed 51 rows containing missing values (geom_point).
+
+![](lab-02_files/figure-gfm/plastic-waste-mismanaged-continent-1.png)<!-- -->
+
+It seems that the two trends discussed earlier can capture certain
+continents. For example, Europe seems to follow the second trend
+discussed earlier whereby increases in plastic waste per capita relate
+to marginal increases in mismanaged plastic waste per capita. Asia
+follows both trends whereby some countries experience high or marginal
+increases in mismanaged plastic waste per capita as plastic waste per
+capita increases. North America and South America follow a compromised,
+loosened pattern between the two trends.
 
 ### Exercise 7
 
-Remove this text, and add your answer for Exercise 7 here.
-
 ``` r
-# insert code here
+ggplot(data = plastic_waste, 
+            aes(x = plastic_waste_per_cap, y = total_pop
+                                )) +
+  geom_point() +
+  labs(
+    x= "Plastic Waste Per Capita (kg/day)",
+    y = "Total Population",
+    title = "Relationship between Plastic Waste Per Capita and Total Population"
+    )  
 ```
 
+    ## Warning: Removed 61 rows containing missing values (geom_point).
+
+![](lab-02_files/figure-gfm/plastic-waste-population-total-1.png)<!-- -->
+
 ``` r
-# insert code here
+ggplot(data = plastic_waste, 
+            aes(x = plastic_waste_per_cap, y = coastal_pop
+                                )) +
+  geom_point() +
+  labs(
+    x= "Plastic Waste Per Capita (kg/day)",
+    y = "Total Population",
+    title = "Relationship between Plastic Waste Per Capita and Coastal Population"
+    )  
 ```
+
+    ## Warning: Removed 51 rows containing missing values (geom_point).
+
+![](lab-02_files/figure-gfm/plastic-waste-population-coastal-1.png)<!-- -->
+
+The relationships between plastic waste per capita and total population
+and between plastic waste per capita and coastal population seem to be
+similarly linear. The relationship between plastic waste per ccapita and
+total population, indicated by a more horizontal trend, seems closer to
+0, and the relationship between plastic waste per capita and coastal
+population, indicated by a more vertical trend, seems closer to none as
+well.
 
 ### Exercise 8
 
