@@ -17,23 +17,46 @@ plastic_waste <- read_csv("data/plastic-waste.csv")
 
 ## Exercises
 
+```{r}
+ggplot(data = plastic_waste, aes(x = plastic_waste_per_cap)) +
+  geom_histogram(binwidth = 0.2)
+
+plastic_waste %>%
+  filter(plastic_waste_per_cap > 3.5)
+
+```
 ### Exercise 1
 
 Remove this text, and add your answer for Exercise 1 here.
 
 ```{r plastic-waste-continent}
-# insert code here
+ggplot(data = plastic_waste, aes(x = plastic_waste_per_cap)) +
+geom_histogram() +
+  labs(
+  x = "Plastic Waste Per Capita (kg/day)",
+  y = "Count",
+  title = "Plastic Waste Per Capiata (kg/day)",
+  subtitle = "By Continent"
+) + 
+facet_wrap(~ continent)
 ```
 
 ### Exercise 2
 
 ```{r plastic-waste-density}
-# insert code here
+ggplot(data = plastic_waste, 
+       mapping = aes(x = plastic_waste_per_cap, 
+                     color = continent,
+                     fill = continent)) +
+  geom_density(alpha = .25)
+
 ```
+
+
 
 ### Exercise 3
 
-Remove this text, and add your answer for Exercise 3 here.
+We defined the color and fill of the curves by mapping aesthetics of the plot because we wanted the features to vary as the function of the variable continent. In contrast, we defined the alpha level as a characteristic of the plotting geom because we want the characteristic to apply to the graph universally.
 
 ### Exercise 4
 
